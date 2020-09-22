@@ -41,8 +41,14 @@ function App() {
             </span>
           </h2>
           <div className='airport-details'>
-            <h4>Local time: {localDate.time}</h4>
-            <h4>Local date: {localDate.date}</h4>
+            <h4>
+              <i className='far fa-clock'></i>
+              Local time: {localDate.time}
+            </h4>
+            <h4>
+              <i className='fas fa-calendar-day'></i>
+              Local date: {localDate.date}
+            </h4>
           </div>
         </div>
       )}
@@ -53,7 +59,10 @@ function App() {
 
           <div className='flights'>
             <div className='arrivals'>
-              <h3 className='category-title'>Arrivals:</h3>
+              <h3 className='category-title'>
+                <i className='fas fa-plane-arrival'></i>
+                Arrivals:
+              </h3>
               <ul>
                 {flights.arriving.map((x, i) => {
                   return (
@@ -67,7 +76,10 @@ function App() {
               </ul>
             </div>
             <div className='departures'>
-              <h3 className='category-title'>Departures:</h3>
+              <h3 className='category-title'>
+                <i className='fas fa-plane-departure'></i>
+                Departures:
+              </h3>
               <ul>
                 {flights.departing.map((x, i) => {
                   return (
