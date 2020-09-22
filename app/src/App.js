@@ -11,7 +11,6 @@ function App() {
 
   useEffect(() => {
     flightsAPI.getAirport().then((response) => {
-      console.log(response);
       setAirportData(response.data[0]);
     });
 
@@ -24,7 +23,6 @@ function App() {
   useEffect(() => {
     if (localDate !== "") {
       flightsAPI.getMappedFlights().then((response) => {
-        console.log(response);
         setFlights(response);
       });
     }
