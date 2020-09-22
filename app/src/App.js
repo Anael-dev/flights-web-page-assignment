@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import dateUtil from "./utils/dateUtil";
 import "./App.css";
 import flightsAPI from "./api/flightsAPI";
 
 function App() {
   const [localDate, setLocalDate] = useState("");
   const [airportData, setAirportData] = useState("");
+  const [flights, setFlights] = useState("");
 
   useEffect(() => {
     flightsAPI.getAirport().then((response) => {
@@ -12,49 +14,20 @@ function App() {
       setAirportData(response.data[0]);
     });
 
-    const usaTime = new Date().toLocaleString("en-US", {
-      timeZone: "America/New_York",
-    });
-    console.log("USA time: " + usaTime);
     setLocalDate({
-      date: new Date(usaTime).toISOString().slice(0, 10),
-      time: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-        timeZone: "America/New_York",
-      }),
+      date: dateUtil.USLocalTime,
+      time: dateUtil.getUSTime(),
     });
-    // console.log("USA time: " + new Date(usaTime).toISOString().slice(0, 10));
-    // var string = new Date().toLocaleTimeString([], {
-    //   hour: "2-digit",
-    //   minute: "2-digit",
-    //   timeZone: "America/New_York",
-    // });
-    // console.log(string);
   }, []);
 
   useEffect(() => {
     if (localDate !== "") {
-      flightsAPI
-        .getAllFlights(localDate.date, localDate.time)
-        .then((response) => {
-          console.log(response);
-        });
+      flightsAPI.getMappedFlights().then((response) => {
+        console.log(response);
+        setFlights(response);
+      });
     }
   }, [localDate]);
-  // useEffect(() => {
-  //   const formattedDate = new Date(localDate.usaTime.toISOString());
-  //   let year = formattedDate.getFullYear();
-  //   let month = formattedDate.getMonth() + 1;
-  //   let dt = formattedDate.getDate();
-  //   if (dt < 10) {
-  //     dt = "0" + dt;
-  //   }
-  //   if (month < 10) {
-  //     month = "0" + month;
-  //   }
-  //   console.log(year + "-" + month + "-" + dt);
-  // }, [localDate]);
 
   return (
     <div className='App'>
