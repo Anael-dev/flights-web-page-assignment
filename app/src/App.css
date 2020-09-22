@@ -1,0 +1,116 @@
+/*** Fonts ***/
+@import url("https://fonts.googleapis.com/css2?family=Lora:wght@300;400;700&display=swap");
+
+/*** Global Styles ***/
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-image: linear-gradient(
+      to bottom,
+      rgba(29, 28, 28, 0.877),
+      rgba(83, 78, 78, 0.589)
+    ),
+    url("./images/background-img.jpg");
+  background-position: left top;
+  background-size: cover;
+  background-repeat: no-repeat;
+  font-family: "Lora", serif;
+  color: #f3f2f2;
+  font-size: 0.8rem;
+  font-weight: 300;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/*** Titles ***/
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Lora", serif;
+  text-align: center;
+  margin: 0;
+  margin-bottom: 0.3em;
+  font-weight: 400;
+}
+
+.category-title {
+  text-align: left;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin: 0.5em 0;
+}
+
+button {
+  display: inline-block;
+  font-size: 0.8em;
+  font-weight: 700;
+  font-family: "Lora", serif;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border: 0;
+  outline: none;
+  border-radius: 5px;
+  text-decoration: underline transparent;
+  text-align: center;
+  cursor: pointer;
+  padding: 0.7em 1.1em;
+  margin: 0.5em 0;
+  min-width: 60px;
+  max-width: 60px;
+  box-shadow: none !important; /* avoiding box-shadow on active state */
+  transition: 0.25s;
+}
+
+.container {
+  padding: 5em;
+}
+
+.info {
+  margin-left: 0.3em;
+}
+
+.airport-data {
+  width: 90%;
+  margin: 0 auto;
+  margin-bottom: 4em;
+  border-bottom: 1px solid #f3f2f2;
+}
+
+.airport-details {
+  margin-top: 1em;
+
+  display: flex;
+  justify-content: center;
+}
+
+.airport-details > h4 {
+  margin-right: 2em;
+}
+
+.flights {
+  margin-top: 1.5em;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.time {
+  margin-left: 0.3em;
+}
+.hide-info {
+  visibility: hidden;
+}
+
+.show-info {
+  visibility: visible;
+}
