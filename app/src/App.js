@@ -2,50 +2,48 @@ import React, { useEffect, useState } from "react";
 import dateUtil from "./utils/dateUtil";
 import "./App.css";
 import flightsAPI from "./api/flightsAPI";
+import airportsAPI from "./api/airportsAPI";
 import Flight from "./Flight";
 
 function App() {
-  const [localDate, setLocalDate] = useState("");
   const [airportData, setAirportData] = useState("");
+  const [localDate, setLocalDate] = useState("");
+  const [localTime, setLocalTime] = useState("");
+
   const [flights, setFlights] = useState("");
 
   useEffect(() => {
-    flightsAPI.getAirport().then((response) => {
-      setAirportData(response.data[0]);
+    airportsAPI.getAirportByCode("JFK").then((response) => {
+      setAirportData(response);
     });
-
-    setLocalDate({
-      date: dateUtil.USLocalTime,
-      time: dateUtil.getUSTime(),
+    flightsAPI.getAllFlights().then((response) => {
+      setFlights(response);
     });
   }, []);
 
   useEffect(() => {
-    if (localDate !== "") {
-      flightsAPI.getMappedFlights().then((response) => {
-        setFlights(response);
-      });
-    }
-  }, [localDate]);
+    setLocalDate(dateUtil.localDate);
+    setLocalTime(dateUtil.localTime);
+  }, [airportData]);
 
   return (
     <div className='container'>
       {airportData && (
         <div className='airport-data'>
           <h2>
-            {airportData.airport_name} Airport,
+            {airportData.airport} Airport,
             <span className='info'>
-              {airportData.city_iata_code} {airportData.country_name}
+              {airportData.iataCode} {airportData.country}
             </span>
           </h2>
           <div className='airport-details'>
             <h4>
-              <i className='far fa-clock'></i>
-              Local time: {localDate.time}
+              <i className='fas fa-calendar-day'></i>
+              Local time: {localDate}
             </h4>
             <h4>
-              <i className='fas fa-calendar-day'></i>
-              Local date: {localDate.date}
+              <i className='far fa-clock'></i>
+              Local date: {localTime}
             </h4>
           </div>
         </div>
@@ -62,14 +60,14 @@ function App() {
                 Arrivals:
               </h3>
               <ul>
-                {flights.arriving.map((x, i) => {
-                  return (
-                    <li key={i}>
-                      <li key={i}>
-                        <Flight key={i} data={x} isArriving={true} />
+                {flights.map((x) => {
+                  if (x.isArriving)
+                    return (
+                      <li key={x._id}>
+                        <Flight key={x._id} data={x} />
                       </li>
-                    </li>
-                  );
+                    );
+                  return null;
                 })}
               </ul>
             </div>
@@ -79,12 +77,14 @@ function App() {
                 Departures:
               </h3>
               <ul>
-                {flights.departing.map((x, i) => {
-                  return (
-                    <li key={i}>
-                      <Flight key={i} data={x} isArriving={false} />
-                    </li>
-                  );
+                {flights.map((x) => {
+                  if (!x.isArriving)
+                    return (
+                      <li key={x._id}>
+                        <Flight key={x._id} data={x} />
+                      </li>
+                    );
+                  return null;
                 })}
               </ul>
             </div>
