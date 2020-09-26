@@ -1,5 +1,5 @@
 
-## Quick Start
+# Quick Start
 
 - You will need a <a href="https://nodejs.org/en/download/" target="_blank">**Node.js**</a> installed in your environement.
 
