@@ -2,48 +2,50 @@ import React, { useEffect, useState } from "react";
 import dateUtil from "./utils/dateUtil";
 import "./App.css";
 import flightsAPI from "./api/flightsAPI";
-import airportsAPI from "./api/airportsAPI";
 import Flight from "./Flight";
 
 function App() {
-  const [airportData, setAirportData] = useState("");
   const [localDate, setLocalDate] = useState("");
-  const [localTime, setLocalTime] = useState("");
-
+  const [airportData, setAirportData] = useState("");
   const [flights, setFlights] = useState("");
 
   useEffect(() => {
-    airportsAPI.getAirportByCode("JFK").then((response) => {
-      setAirportData(response);
+    flightsAPI.getAirport().then((response) => {
+      setAirportData(response.data[0]);
     });
-    flightsAPI.getAllFlights().then((response) => {
-      setFlights(response);
+
+    setLocalDate({
+      date: dateUtil.USLocalTime,
+      time: dateUtil.getUSTime(),
     });
   }, []);
 
   useEffect(() => {
-    setLocalDate(dateUtil.localDate);
-    setLocalTime(dateUtil.localTime);
-  }, [airportData]);
+    if (localDate !== "") {
+      flightsAPI.getMappedFlights().then((response) => {
+        setFlights(response);
+      });
+    }
+  }, [localDate]);
 
   return (
     <div className='container'>
       {airportData && (
         <div className='airport-data'>
           <h2>
-            {airportData.airport} Airport,
+            {airportData.airport_name} Airport,
             <span className='info'>
-              {airportData.iataCode} {airportData.country}
+              {airportData.city_iata_code} {airportData.country_name}
             </span>
           </h2>
           <div className='airport-details'>
             <h4>
-              <i className='fas fa-calendar-day'></i>
-              Local time: {localDate}
+              <i className='far fa-clock'></i>
+              Local time: {localDate.time}
             </h4>
             <h4>
-              <i className='far fa-clock'></i>
-              Local date: {localTime}
+              <i className='fas fa-calendar-day'></i>
+              Local date: {localDate.date}
             </h4>
           </div>
         </div>
@@ -60,14 +62,14 @@ function App() {
                 Arrivals:
               </h3>
               <ul>
-                {flights.map((x) => {
-                  if (x.isArriving)
-                    return (
-                      <li key={x._id}>
-                        <Flight key={x._id} data={x} />
+                {flights.arriving.map((x, i) => {
+                  return (
+                    <li key={i}>
+                      <li key={i}>
+                        <Flight key={i} data={x} isArriving={true} />
                       </li>
-                    );
-                  return null;
+                    </li>
+                  );
                 })}
               </ul>
             </div>
@@ -77,14 +79,12 @@ function App() {
                 Departures:
               </h3>
               <ul>
-                {flights.map((x) => {
-                  if (!x.isArriving)
-                    return (
-                      <li key={x._id}>
-                        <Flight key={x._id} data={x} />
-                      </li>
-                    );
-                  return null;
+                {flights.departing.map((x, i) => {
+                  return (
+                    <li key={i}>
+                      <Flight key={i} data={x} isArriving={false} />
+                    </li>
+                  );
                 })}
               </ul>
             </div>
